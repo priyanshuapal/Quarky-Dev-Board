@@ -1,0 +1,11 @@
+{
+  "name": "QuarkyESP32",
+  "version": "1.0.0",
+  "description": "Unofficial bare-metal Arduino/PlatformIO library for the STEMpedia Quarky ESP32 board.",
+  "keywords": ["esp32", "quarky", "robotics", "drv8833", "ws2812b"],
+  "frameworks": ["arduino"],
+  "platforms": ["espressif32"],
+  "dependencies": {
+    "adafruit/Adafruit NeoPixel": "^1.12.0"
+  }
+}
