@@ -2,7 +2,7 @@
 
 Reverse-engineered GPIO pinout, hardware notes, and Arduino/PlatformIO C++ library for the **STEMpedia Quarky** (ESP32).
 
-> **Status:** Work in Progress. Most peripherals are verified; IR sensors and Touch Pad 5 are pending final hardware verification.
+> **Status:** Work in Progress. Most peripherals are verified; IR sensors are pending final hardware verification.
 
 ---
 
