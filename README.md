@@ -28,13 +28,16 @@ board = esp32dev
 framework = arduino
 monitor_speed = 115200
 lib_deps =
-    https://github.com/<your-username>/QuarkyESP32.git
+    https://github.com/priyanshuapal/Quarky-Dev-Board.git
 ```
 
 *(PlatformIO automatically pulls `adafruit/Adafruit NeoPixel` via `library.json`.)*
 
 ---
 ## Hardware Overview
+
+<img width="1832" height="2987" alt="IMG_20261126_212912 jpg" src="https://github.com/user-attachments/assets/3a5e04ea-4400-4bbd-a7eb-8e7997b2f995" />
+
 
 | Subsystem | Component / Spec | Notes |
 | :--- | :--- | :--- |
@@ -50,6 +53,9 @@ lib_deps =
 ---
 
 ## GPIO Pinout Map
+
+<img width="1639" height="2600" alt="IMG_20261126_212926 jpg" src="https://github.com/user-attachments/assets/bfc96a42-a10c-411e-abd0-935574d99682" />
+
 
 | GPIO | Board Label / Peripheral | Function / Type | Notes |
 | :---: | :--- | :--- | :--- |
