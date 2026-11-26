@@ -6,6 +6,30 @@ Reverse-engineered GPIO pinout, hardware notes, and Arduino/PlatformIO C++ libra
 
 ---
 
+## Installation
+
+### Arduino IDE
+1. Download this repository as a `.zip` file.
+2. In Arduino IDE, go to **Sketch → Include Library → Add .ZIP Library...** and select the downloaded file.
+3. Install **Adafruit NeoPixel** from the Library Manager.
+
+
+### PlatformIO (Recommended)
+Add the repository URL to `lib_deps` in your `platformio.ini`:
+
+```ini
+[env:quarky]
+platform = espressif32
+board = esp32dev
+framework = arduino
+monitor_speed = 115200
+lib_deps =
+    https://github.com/<your-username>/QuarkyESP32.git
+```
+
+*(PlatformIO automatically pulls `adafruit/Adafruit NeoPixel` via `library.json`.)*
+
+---
 ## Hardware Overview
 
 | Subsystem | Component / Spec | Notes |
@@ -60,29 +84,7 @@ Reverse-engineered GPIO pinout, hardware notes, and Arduino/PlatformIO C++ libra
 
 ---
 
-## Installation
 
-### PlatformIO (Recommended)
-Add the repository URL to `lib_deps` in your `platformio.ini`:
-
-```ini
-[env:quarky]
-platform = espressif32
-board = esp32dev
-framework = arduino
-monitor_speed = 115200
-lib_deps =
-    https://github.com/<your-username>/QuarkyESP32.git
-```
-
-*(PlatformIO automatically pulls `adafruit/Adafruit NeoPixel` via `library.json`.)*
-
-### Arduino IDE
-1. Download this repository as a `.zip` file.
-2. In Arduino IDE, go to **Sketch → Include Library → Add .ZIP Library...** and select the downloaded file.
-3. Install **Adafruit NeoPixel** from the Library Manager.
-
----
 
 ## Quick Start
 
