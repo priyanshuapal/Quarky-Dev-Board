@@ -40,6 +40,7 @@
 
 // --- Audio (NS4150B Amp on DAC1) ---
 #define QUARKY_SPEAKER_PIN 25
+#define QUARKY_AMP_EN_PIN  5  // Active-HIGH enable (LOW = shutdown/mute)
 
 // --- Tactile Buttons (Resistor Ladder on ADC1_CH0) ---
 // L ≈ 1.3V (~1610), R ≈ 3.3V (~4095)
@@ -62,5 +63,5 @@
   #define QUARKY_IR_R_PIN 35
 #endif
 #ifndef QUARKY_IR_EN_PIN
-  #define QUARKY_IR_EN_PIN 5 // Set to -1 if emitters are hardwired ON
+  #define QUARKY_IR_EN_PIN -1 // Set to GPIO if emitters are switched
 #endif
