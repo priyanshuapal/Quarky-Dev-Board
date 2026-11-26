@@ -9,14 +9,12 @@ Reverse-engineered GPIO pinout, hardware notes, and Arduino/PlatformIO C++ libra
 ## Installation
 
 ### AI Agent
-Download the AGENTS.md file and give it to your preferred agent of choice.
-
+Download the `AGENTS.md` file and give it to your preferred agent of choice.
 
 ### Arduino IDE
 1. Download this repository as a `.zip` file.
 2. In Arduino IDE, go to **Sketch → Include Library → Add .ZIP Library...** and select the downloaded file.
 3. Install **Adafruit NeoPixel** from the Library Manager.
-
 
 ### PlatformIO (Recommended)
 Add the repository URL to `lib_deps` in your `platformio.ini`:
@@ -34,11 +32,10 @@ lib_deps =
 *(PlatformIO automatically pulls `adafruit/Adafruit NeoPixel` via `library.json`.)*
 
 ---
+
 ## Hardware Overview
+
 <img width="1832" height="2987" alt="IMG_20261126_212912 jpg" src="https://github.com/user-attachments/assets/621f2511-48c2-4f13-a2a6-46df902102a8" />
-
-
-
 
 | Subsystem | Component / Spec | Notes |
 | :--- | :--- | :--- |
@@ -46,7 +43,7 @@ lib_deps =
 | **USB-to-Serial** | CH340G | USB-C interface for flashing and serial monitor |
 | **Motor Driver** | DRV8833 | Dual H-Bridge for 2× DC motors |
 | **Display** | 7×5 RGB LED Matrix | 35 addressable LEDs, top-left origin, progressive (row-major) |
-| **Audio** | NS4150B + Speaker | Driven via ESP32 internal DAC1 (`GPIO 25`) |
+| **Audio** | NS4150B + Speaker | Driven via ESP32 internal DAC1 (`GPIO 25`), amp enable on `GPIO 5` |
 | **Power & Charging** | TP4056 + Boost Converter | 1S Li-ion charging via USB-C; internal step-up for battery operation |
 | **Controls** | 2× Tactile Buttons, 5× Touch Pads, 1× Reset | L/R buttons share a resistor ladder on `GPIO 36` |
 | **Sensors** | 2× IR Proximity/Line Sensors | Pinout TBD |
@@ -57,12 +54,11 @@ lib_deps =
 
 <img width="983" height="1559" alt="IMG_20261126_212926" src="https://github.com/user-attachments/assets/375b5d06-0c9e-43ac-a4c1-25178153a151" />
 
-
 | GPIO | Board Label / Peripheral | Function / Type | Notes |
 | :---: | :--- | :--- | :--- |
 | **2** | Motor R — `AIN1` | Output (PWM) | DRV8833 Channel A; strapping pin (keep LOW/floating at boot) |
 | **4** | Motor L — `BIN1` | Output (PWM) | DRV8833 Channel B |
-| **5** | *Unconfirmed* | TBD | Candidate for IR emitter enable |
+| **5** | Speaker Amp Enable (`NS4150B`) | Output | Active-HIGH enable (`LOW` = shutdown/mute) |
 | **12** | Touch Pad 3 | Capacitive Touch (`T5`) | Strapping pin (MTDI); avoid pulling HIGH at boot |
 | **13** | Touch Pad 2 | Capacitive Touch (`T4`) | |
 | **14** | Touch Pad 4 | Capacitive Touch (`T6`) | |
@@ -88,14 +84,12 @@ lib_deps =
 
 ## Hardware Notes
 
-* **Buttons (`GPIO 36`):** Idle `~0 V` (ADC ≈ `0`), Button L `~1.3 V` (ADC ≈ `1500–1650`), Button R `~3.3 V` (ADC ≈ `4095`).
-* **7×5 LED Matrix (`GPIO 21`):** 35 LEDs, progressive row-major from top-left (`0` to `34`). Keep brightness capped (e.g., `30–60 / 255`) on battery to avoid brownouts.
-* **DC Motors (`DRV8833`):** Motor L on Channel B (`GPIO 4`, `16`), Motor R on Channel A (`GPIO 2`, `17`).
-* **Audio (`GPIO 25`):** Wired to ESP32 `DAC1`, supporting both `tone()` and raw 8-bit DAC output.
+- **Buttons (`GPIO 36`):** Idle `~0 V` (ADC ≈ `0`), Button L `~1.3 V` (ADC ≈ `1500–1650`), Button R `~3.3 V` (ADC ≈ `4095`).
+- **7×5 LED Matrix (`GPIO 21`):** 35 LEDs, progressive row-major from top-left (`0` to `34`). Keep brightness capped (e.g., `30–60 / 255`) on battery to avoid brownouts.
+- **DC Motors (`DRV8833`):** Motor L on Channel B (`GPIO 4`, `16`), Motor R on Channel A (`GPIO 2`, `17`).
+- **Audio (`GPIO 25` & `GPIO 5`):** Audio input is wired to ESP32 `DAC1` (`GPIO 25`), supporting both `tone()` and raw 8-bit DAC output. `GPIO 5` controls the `NS4150B` enable/shutdown pin (`HIGH` = on, `LOW` = mute/low-power).
 
 ---
-
-
 
 ## Quick Start
 
@@ -131,7 +125,7 @@ void loop() {
 ### Initialization
 | Method | Description |
 | :--- | :--- |
-| `begin(uint8_t ledBrightness = 40)` | Initializes PWM, LED matrix, ADC, and I/O pins. |
+| `begin(uint8_t ledBrightness = 40)` | Initializes PWM, LED matrix, amp enable, ADC, and I/O pins. |
 
 ### DC Motors (`DRV8833`)
 Speed ranges from `-255` (full reverse) to `+255` (full forward).
@@ -170,9 +164,10 @@ Origin `(0, 0)` is top-left; `x` is `0–6`, `y` is `0–4`. Call `showMatrix()`
 | `readTouch(uint8_t pad)` | Returns raw capacitive touch value for pad `1–5`. |
 | `isTouched(uint8_t pad, uint16_t threshold = 40)` | Returns `true` when touch reading drops below `threshold`. |
 
-### Audio (`NS4150B` on DAC1)
+### Audio (`NS4150B` on DAC1 + Enable on `GPIO 5`)
 | Method | Description |
 | :--- | :--- |
+| `setAmpEnabled(bool enabled)` | Enables (`true`) or mutes/shuts down (`false`) the `NS4150B` amp on `GPIO 5`. |
 | `beep(uint16_t freqHz, uint16_t durationMs = 150)` | Plays a tone on `GPIO 25`. |
 | `stopTone()` | Stops active tone output. |
 | `writeDAC(uint8_t value)` | Writes an 8-bit analog sample (`0–255`) directly to DAC1. |
@@ -180,20 +175,20 @@ Origin `(0, 0)` is top-left; `x` is `0–6`, `y` is `0–4`. Call `showMatrix()`
 ### IR Sensors
 | Method | Description |
 | :--- | :--- |
-| `setIREmitters(bool enabled)` | Toggles the IR emitter enable pin (`QUARKY_IR_EN_PIN`). |
+| `setIREmitters(bool enabled)` | Toggles the IR emitter enable pin (`QUARKY_IR_EN_PIN`), if defined. |
 | `readIRLeft()` / `readIRRight()` | Returns 12-bit ADC reading (`0–4095`) from the Left/Right IR sensor. |
 
 ---
 
 ## Overriding Pins
-Unconfirmed and breakout pins in `QuarkyPins.h` use `#ifndef` guards. Override them via `build_flags` in `platformio.ini` without editing the library:
+Unconfirmed and breakout pins in `QuarkyPins.h` use `#ifndef` guards. Override them via `build_flags` in `platformio.ini` without modifying the library:
 
 ```ini
 build_flags =
     -D QUARKY_TOUCH_5=27
     -D QUARKY_IR_L_PIN=34
     -D QUARKY_IR_R_PIN=35
-    -D QUARKY_IR_EN_PIN=5
+    -D QUARKY_IR_EN_PIN=-1
 ```
 
 ---
