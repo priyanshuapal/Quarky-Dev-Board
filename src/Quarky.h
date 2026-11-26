@@ -44,7 +44,8 @@ public:
   uint16_t readTouch(uint8_t pad);
   bool isTouched(uint8_t pad, uint16_t threshold = 40);
 
-  // --- Speaker (NS4150B on DAC1) ---
+  // --- Speaker (NS4150B on DAC1 + Enable on GPIO 5) ---
+  void setAmpEnabled(bool enabled);
   void beep(uint16_t freqHz, uint16_t durationMs = 150);
   void stopTone();
   void writeDAC(uint8_t value);
