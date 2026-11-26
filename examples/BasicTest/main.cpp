@@ -7,17 +7,20 @@ void setup() {
   Serial.begin(115200);
   bot.begin(40);
 
-  // Startup chime + green smile check
+  // Startup chime
+  bot.setAmpEnabled(true);
   bot.beep(880, 100);
   delay(120);
   bot.beep(1320, 150);
 
+  // Matrix check
   bot.fillMatrix(0, 80, 255);
   bot.showMatrix();
   delay(500);
   bot.clearMatrix();
   bot.showMatrix();
 
+  // Center servos
   bot.setServo(1, 90);
   bot.setServo(2, 90);
 }
