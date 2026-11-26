@@ -58,6 +58,10 @@ void Quarky::begin(uint8_t ledBrightness) {
   _leds.clear();
   _leds.show();
 
+  // Speaker Amp Enable (NS4150B)
+  pinMode(QUARKY_AMP_EN_PIN, OUTPUT);
+  digitalWrite(QUARKY_AMP_EN_PIN, HIGH);
+
   // Buttons & IR
   pinMode(QUARKY_BTN_PIN, INPUT);
   pinMode(QUARKY_IR_L_PIN, INPUT);
@@ -173,6 +177,10 @@ bool Quarky::isTouched(uint8_t pad, uint16_t threshold) {
 }
 
 // --- Speaker ---
+void Quarky::setAmpEnabled(bool enabled) {
+  digitalWrite(QUARKY_AMP_EN_PIN, enabled ? HIGH : LOW);
+}
+
 void Quarky::beep(uint16_t freqHz, uint16_t durationMs) {
   tone(QUARKY_SPEAKER_PIN, freqHz, durationMs);
 }
