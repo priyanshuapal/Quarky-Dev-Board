@@ -8,6 +8,10 @@ Reverse-engineered GPIO pinout, hardware notes, and Arduino/PlatformIO C++ libra
 
 ## Installation
 
+### AI Agent
+Download the AGENTS.md file and give it to your preferred agent of choice.
+
+
 ### Arduino IDE
 1. Download this repository as a `.zip` file.
 2. In Arduino IDE, go to **Sketch → Include Library → Add .ZIP Library...** and select the downloaded file.
