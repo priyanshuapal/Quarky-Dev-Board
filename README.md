@@ -35,8 +35,9 @@ lib_deps =
 
 ---
 ## Hardware Overview
+<img width="1832" height="2987" alt="IMG_20261126_212912 jpg" src="https://github.com/user-attachments/assets/621f2511-48c2-4f13-a2a6-46df902102a8" />
 
-<img width="1832" height="2987" alt="IMG_20261126_212912 jpg" src="https://github.com/user-attachments/assets/3a5e04ea-4400-4bbd-a7eb-8e7997b2f995" />
+
 
 
 | Subsystem | Component / Spec | Notes |
@@ -54,7 +55,7 @@ lib_deps =
 
 ## GPIO Pinout Map
 
-<img width="1639" height="2600" alt="IMG_20261126_212926 jpg" src="https://github.com/user-attachments/assets/bfc96a42-a10c-411e-abd0-935574d99682" />
+<img width="983" height="1559" alt="IMG_20261126_212926" src="https://github.com/user-attachments/assets/375b5d06-0c9e-43ac-a4c1-25178153a151" />
 
 
 | GPIO | Board Label / Peripheral | Function / Type | Notes |
